@@ -41,10 +41,18 @@ const useStyles = makeStyles(theme => ({
     // backgroundColor: fade(theme.palette.common.white, 0.15),
 
     marginLeft: 0,
-    width: "100%",
-    [theme.breakpoints.up("sm")]: {
-      marginLeft: theme.spacing(1),
-      width: "auto"
+    width: "7ch !important",
+    transition: "width 1s",
+    // [theme.breakpoints.up("sm")]: {
+    //   marginLeft: theme.spacing(1),
+    //   width: "auto"
+    // },
+    "&:focus-within": {
+      width: "24ch !important"
+    },
+    "& input": {
+      color: "white",
+      paddingLeft: "22%"
     }
   },
   searchIcon: {
@@ -55,22 +63,6 @@ const useStyles = makeStyles(theme => ({
     display: "flex",
     alignItems: "center",
     justifyContent: "center"
-  },
-  inputRoot: {
-    color: "inherit"
-  },
-  inputInput: {
-    padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
-    transition: theme.transitions.create("width"),
-    width: "100%",
-    [theme.breakpoints.up("sm")]: {
-      width: "12ch",
-      "&:focus": {
-        width: "20ch"
-      }
-    }
   },
   logo: {
     flexGrow: 1
@@ -96,22 +88,13 @@ export default function SearchAppBar() {
             Material-UI
           </Typography> */}
           <Link className={classes.logo} to="/">
-            {/* <div className="logo"> */}
             <img src={logo} alt="watchko-logo" />
-            {/* </div> */}
           </Link>
           <div className={classes.search}>
             <div className={classes.searchIcon}>
               <SearchIcon />
             </div>
-            <TextField
-              variant="standard"
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput
-              }}
-              color="white"
-            />
+            <TextField variant="standard" />
             {/* <InputBase
               placeholder="Search…"
               classes={{

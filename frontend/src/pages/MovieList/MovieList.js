@@ -138,6 +138,7 @@ const MovieList = ({
             key={movie.id}
             clicked={() => this.fullPostHandler(movie.id)}
             id={movie.id}
+             voteAverage={movie.vote_average}
             {...props}
           />
         ))}
