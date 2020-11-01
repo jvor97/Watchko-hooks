@@ -1,0 +1,40 @@
+.Login .modal-content {
+  background-color: #151618 !important;
+  font-family: "Hepta Slab", serif;
+}
+
+.Login .modal-header {
+  border-bottom: 1px solid #847f12 !important;
+}
+/* .Login .modal-footer {
+  border-top: 1px solid #847f12 !important;
+} */
+
+.loginBtn {
+  background-color: #847e12d3 !important;
+  border: none !important;
+  color: #bdbdbd !important;
+}
+
+.loginBtn:hover,
+.loginBtn:active,
+.loginBtn:focus {
+  background-color: #847f12 !important;
+  border: none !important;
+  outline: none !important;
+  color: #bdbdbd;
+}
+.loginBtn.active {
+  background-color: #847f12 !important;
+}
+
+.signingBtn {
+  color: #847f12 !important;
+  background-color: #151618 !important;
+  border-color: #847f12 !important;
+}
+.signingBtn:hover {
+  color: #151618 !important;
+  background-color: #847f12 !important;
+  border-color: #847f12 !important;
+}

@@ -1,0 +1,9 @@
+.btn-outline {
+  color: #847f12 !important;
+  border-color: #847f12 !important;
+}
+
+.btn-outline:hover {
+  background: #847f12;
+  color: #9d9d9de6 !important;
+}
