@@ -62,9 +62,9 @@ export const loadFullMovie = id => {
     const fullMovie = await axios.get(
       "https://api.themoviedb.org/3/movie/" +
         id +
-        "?api_key=65777f92529c3462f958232f137b357f&language=en-US&page=1&fbclid=IwAR3WdGpp9ZHMyGn4Vyni4MFF0hpc-Kfvyyj9PLnyueheoQ0o3YIPcmSL5Dk&language=en-US"
+        "?api_key=65777f92529c3462f958232f137b357f&language=en-US&page=1&fbclid=IwAR3WdGpp9ZHMyGn4Vyni4MFF0hpc-Kfvyyj9PLnyueheoQ0o3YIPcmSL5Dk&language=en-US&append_to_response=videos"
     );
-
+    dispatch(loading(false));
     dispatch(loadMovie(fullMovie.data));
   };
 };
@@ -75,7 +75,6 @@ export const loadMovie = selectedMovie => {
 
   // selectedMovie.rentPrice = rentRandom;
   // selectedMovie.buyPrice = buyRandom;
-  console.log(selectedMovie);
   return {
     type: "GET_FULLMOVIE",
     selectedMovie: selectedMovie

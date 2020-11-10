@@ -55,7 +55,7 @@ const Movie = ({ title, img, voteAverage, id, ...props }) => {
       />
       <span className={classes.movieTitle}>
         <h5>{title}</h5>
-        <Rater voteAverage={voteAverage} />
+        <Rater voteAverage={voteAverage} direction="row" />
       </span>
     </Grid>
   );

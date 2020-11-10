@@ -14,7 +14,9 @@ import { TextField } from "@material-ui/core";
 
 const useStyles = makeStyles(theme => ({
   root: {
-    flexGrow: 1
+    flexGrow: 1,
+    position: "relative",
+    zIndex: 999
   },
   nav: {
     //   background:
