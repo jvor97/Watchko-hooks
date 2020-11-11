@@ -24,7 +24,8 @@ const MovieList = ({
   //   this.props.onLoadMovies(null, null);
   // }
   // tracking on which page we currently are
-  const [page, setPage] = useState(1);
+  // starting with 2 to prevent double render of 1st page
+  const [page, setPage] = useState(2);
   const classes = useStyles();
   // add loader refrence
   const loader = useRef(null);
@@ -41,7 +42,6 @@ const MovieList = ({
       observer.observe(loader.current);
     }
   }, []);
-  console.log(apiUrl);
 
   // useEffect(() => {
   //   // here we simulate adding new posts to List
@@ -57,10 +57,11 @@ const MovieList = ({
   // insert page to apiUrl ehich will execute useEffect with lodMovies
   useEffect(() => {
     const copyApiUrl = apiUrl;
-    console.log(copyApiUrl);
+    // console.log(copyApiUrl);
     // const updatedUrl =
     apiUrl.set("page", page);
-    console.log(page);
+    // apiUrl.set("with_genres", 12);
+
     // console.log(updatedUrl);
     handleApiUrlChange(apiUrl);
   }, [page]);
@@ -74,7 +75,6 @@ const MovieList = ({
       setPage(page => page + 1);
     }
   };
-  console.log(page);
 
   // componentDidUpdate() {
   //   let genre = this.props.match.params.genre;
@@ -99,7 +99,7 @@ const MovieList = ({
   const fullPostHandler = id => {
     this.props.history.push("/movies/" + id);
   };
-  console.log(movies);
+  // console.log(movies);
 
   // render() {
   //   const style = {
@@ -136,7 +136,7 @@ const MovieList = ({
             title={movie.title}
             img={movie.poster_path}
             key={movie.id}
-            clicked={() => this.fullPostHandler(movie.id)}
+            clicked={() => fullPostHandler(movie.id)}
             id={movie.id}
             voteAverage={movie.vote_average}
             {...props}

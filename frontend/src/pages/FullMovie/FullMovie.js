@@ -5,7 +5,6 @@ import Button from "@material-ui/core/Button";
 
 // import Rater from "react-rater";
 
-import FullMovieButtons from "../../components/FullMovieButtons/FullMovieButtons";
 import { makeStyles } from "@material-ui/styles";
 import PlayArrowIcon from "@material-ui/icons/PlayArrow";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
@@ -107,7 +106,7 @@ const FullMovie = ({ loadFullMovie, fullMovie, loading, ...props }) => {
   // - genres
   // - trailer title
   // - play time
-  
+
   const goBackHandler = () => {
     props.history.push("/");
   };

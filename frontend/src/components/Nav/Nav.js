@@ -1,15 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
 
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
-import IconButton from "@material-ui/core/IconButton";
-import Typography from "@material-ui/core/Typography";
-import InputBase from "@material-ui/core/InputBase";
+import Button from "@material-ui/core/Button";
+import Drawer from "@material-ui/core/Drawer";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
 import { fade, makeStyles } from "@material-ui/core/styles";
 import MenuIcon from "@material-ui/icons/Menu";
 import SearchIcon from "@material-ui/icons/Search";
 import logo from "./watchko-logo.png";
+import * as actionCreators from "../../store/actions/actions";
+import { lightGrey } from "../../colors";
 import { TextField } from "@material-ui/core";
 
 const useStyles = makeStyles(theme => ({
@@ -66,13 +71,34 @@ const useStyles = makeStyles(theme => ({
     alignItems: "center",
     justifyContent: "center"
   },
-  logo: {
-    flexGrow: 1
+  drawerPaper: {
+    background: "black",
+    color: `${lightGrey}`,
+    width: "10rem",
+    "& > ul > div": {
+      paddingBottom: "0 !important"
+    }
+  },
+  btn: {
+    color: `${lightGrey}`
   }
 }));
 
-export default function SearchAppBar() {
+const Nav = ({ getGenres, genres, apiUrl, handleApiUrlChange }) => {
   const classes = useStyles();
+  const [openGenres, setOpenGenres] = useState(false);
+
+  const showGenres = () => {
+    setOpenGenres(true);
+    getGenres();
+  };
+
+  const displayMoviesByGenre = genre => {
+    apiUrl.set("with_genres", genre);
+    apiUrl.delete("page");
+    handleApiUrlChange(apiUrl);
+    setOpenGenres(false);
+  };
 
   return (
     <div className={classes.root}>
@@ -89,9 +115,11 @@ export default function SearchAppBar() {
           {/* <Typography className={classes.title} variant="h6" noWrap>
             Material-UI
           </Typography> */}
-          <Link className={classes.logo} to="/">
-            <img src={logo} alt="watchko-logo" />
-          </Link>
+          <div style={{ flexGrow: 1 }}>
+            <Link to="/">
+              <img src={logo} alt="watchko-logo" />
+            </Link>
+          </div>
           <div className={classes.search}>
             <div className={classes.searchIcon}>
               <SearchIcon />
@@ -107,9 +135,56 @@ export default function SearchAppBar() {
               variant="standard"
             /> */}
           </div>
-          <Typography variant="h6">Genres</Typography>
+          <Button className={classes.btn} onClick={showGenres}>
+            Genres
+          </Button>
+          <Drawer
+            anchor="right"
+            open={openGenres}
+            className={classes.genresDrawer}
+            onClose={() => setOpenGenres(false)}
+            classes={{
+              paper: classes.drawerPaper
+            }}
+          >
+            <List>
+              {genres &&
+                genres.map(genre => (
+                  <ListItem
+                    key={genre.id}
+                    button
+                    onClick={() => displayMoviesByGenre(genre.id)}
+                  >
+                    <ListItemText primary={genre.name} />
+                  </ListItem>
+                ))}
+            </List>
+          </Drawer>
         </Toolbar>
       </AppBar>
     </div>
   );
-}
+};
+
+const mapStateToProps = state => {
+  return {
+    genres: state.api.genres,
+    apiUrl: state.api.apiUrl
+
+    // logout: state.login.userId
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    getGenres: () => dispatch(actionCreators.loadGenres()),
+    handleApiUrlChange: apiUrl => dispatch({ type: "UPDATE_APIURL", apiUrl })
+
+    // toggleLogin: () => dispatch({ type: "TOGGLE_LOGIN" })
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Nav);

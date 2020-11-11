@@ -1,4 +1,9 @@
-import { LOADING, GET_MOVIES, GET_FULLMOVIE } from "../actions/actionTypes";
+import {
+  LOADING,
+  GET_MOVIES,
+  GET_FULLMOVIE,
+  GET_GENRES
+} from "../actions/actionTypes";
 
 /* eslint-disable default-case */
 const url = new URL(
@@ -26,16 +31,19 @@ const reducer = (state = initialState, action) => {
     case GET_MOVIES:
       return {
         ...state,
-        movies: state.movies.concat(action.movies)
+        movies: action.concatMovies
+          ? state.movies.concat(action.movies)
+          : action.movies
       };
     case GET_FULLMOVIE:
       return {
         ...state,
-        selectedMovie: action.selectedMovie
+        selectedMovie: action.selectedMovie,
+        // need to clean this as it would cause double rendering
+        movies: [],
+        apiUrl: new URLSearchParams(url.search.slice(1))
       };
-    case "LOAD_GENRES":
-      console.log(action.genres);
-      console.log(state.genres);
+    case GET_GENRES:
       return {
         ...state,
         genres: action.genres
