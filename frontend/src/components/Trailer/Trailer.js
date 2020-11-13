@@ -83,7 +83,7 @@ const Trailer = ({ posterPath, videos }) => {
           <iframe
             width="620"
             height="415"
-            src={`https://www.youtube.com/embed/${videos.results[0].key}?autoplay=1&mute=1`}
+            src={`https://www.youtube.com/embed/${videos?.results[0]?.key}?autoplay=1&mute=1`}
             className={classes.trailer}
           ></iframe>
         </Fade>

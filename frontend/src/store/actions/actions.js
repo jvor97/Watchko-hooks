@@ -4,13 +4,17 @@ import { LOADING, GET_MOVIES, GET_FULLMOVIE } from "./actionTypes";
 // export const LOADMOVIES = 'LOADMOVIES';
 // export const RELOADMOVIES = 'RELOADMOVIES';
 
-export const loadMovies = apiUrl => {
+export const loadMovies = apiQuery => {
   return async dispatch => {
     dispatch(loading(true));
     // let movies = [];
-    const concatMovies = apiUrl.get("page") > 1;
+    let apiOperation = "discover";
+    if (apiQuery.get("query")) {
+      apiOperation = "search";
+    }
+    const concatMovies = apiQuery.get("page") > 1;
     const movies = await axios.get(
-      `https://api.themoviedb.org/3/discover/movie?${apiUrl}`
+      `https://api.themoviedb.org/3/${apiOperation}/movie?${apiQuery}`
     );
     dispatch(loadMoviesData(movies, concatMovies));
   };

@@ -16,7 +16,7 @@ let initialState = {
   selectedMovie: null,
   previousID: null,
   genres: null,
-  apiUrl: new URLSearchParams(url.search.slice(1)),
+  apiQuery: new URLSearchParams(url.search.slice(1)),
   previousQuery: null
   // genre: ""
 };
@@ -40,8 +40,7 @@ const reducer = (state = initialState, action) => {
         ...state,
         selectedMovie: action.selectedMovie,
         // need to clean this as it would cause double rendering
-        movies: [],
-        apiUrl: new URLSearchParams(url.search.slice(1))
+        movies: []
       };
     case GET_GENRES:
       return {
@@ -49,10 +48,9 @@ const reducer = (state = initialState, action) => {
         genres: action.genres
       };
     case "UPDATE_APIURL":
-      console.log(action.apiUrl);
       return {
         ...state,
-        apiUrl: new URLSearchParams(action.apiUrl)
+        apiQuery: new URLSearchParams(action.apiQuery)
       };
   }
   console.log(state.genres);

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 
@@ -48,7 +48,7 @@ const useStyles = makeStyles(theme => ({
     // backgroundColor: fade(theme.palette.common.white, 0.15),
 
     marginLeft: 0,
-    width: "7ch !important",
+    width: "7ch",
     transition: "width 1s",
     // [theme.breakpoints.up("sm")]: {
     //   marginLeft: theme.spacing(1),
@@ -81,12 +81,20 @@ const useStyles = makeStyles(theme => ({
   },
   btn: {
     color: `${lightGrey}`
+  },
+  searchFullWidth: {
+    width: "24ch !important"
   }
 }));
 
-const Nav = ({ getGenres, genres, apiUrl, handleApiUrlChange }) => {
+const Nav = ({ getGenres, genres, apiQuery, handleApiQueryChange }) => {
   const classes = useStyles();
   const [openGenres, setOpenGenres] = useState(false);
+  const searchRef = useRef();
+
+  let searchWidthClass = searchRef?.current?.value
+    ? classes.searchFullWidth
+    : "";
 
   const showGenres = () => {
     setOpenGenres(true);
@@ -94,10 +102,18 @@ const Nav = ({ getGenres, genres, apiUrl, handleApiUrlChange }) => {
   };
 
   const displayMoviesByGenre = genre => {
-    apiUrl.set("with_genres", genre);
-    apiUrl.delete("page");
-    handleApiUrlChange(apiUrl);
+    apiQuery.set("with_genres", genre);
+    apiQuery.delete("page");
+    apiQuery.delete("query");
+    handleApiQueryChange(apiQuery);
     setOpenGenres(false);
+  };
+
+  const handleSearch = e => {
+    apiQuery.set("query", e.target.value);
+    apiQuery.delete("page");
+    apiQuery.delete("with_genres");
+    handleApiQueryChange(apiQuery);
   };
 
   return (
@@ -120,11 +136,15 @@ const Nav = ({ getGenres, genres, apiUrl, handleApiUrlChange }) => {
               <img src={logo} alt="watchko-logo" />
             </Link>
           </div>
-          <div className={classes.search}>
+          <div className={`${classes.search} ${searchWidthClass}`}>
             <div className={classes.searchIcon}>
               <SearchIcon />
             </div>
-            <TextField variant="standard" />
+            <TextField
+              variant="standard"
+              onChange={e => handleSearch(e)}
+              inputRef={searchRef}
+            />
             {/* <InputBase
               placeholder="Search…"
               classes={{
@@ -169,7 +189,7 @@ const Nav = ({ getGenres, genres, apiUrl, handleApiUrlChange }) => {
 const mapStateToProps = state => {
   return {
     genres: state.api.genres,
-    apiUrl: state.api.apiUrl
+    apiQuery: state.api.apiQuery
 
     // logout: state.login.userId
   };
@@ -178,7 +198,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     getGenres: () => dispatch(actionCreators.loadGenres()),
-    handleApiUrlChange: apiUrl => dispatch({ type: "UPDATE_APIURL", apiUrl })
+    handleApiQueryChange: apiQuery =>
+      dispatch({ type: "UPDATE_APIURL", apiQuery })
 
     // toggleLogin: () => dispatch({ type: "TOGGLE_LOGIN" })
   };

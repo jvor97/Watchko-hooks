@@ -38,16 +38,12 @@ const useStyles = makeStyles({
   }
 });
 
-const Movie = ({ title, img, voteAverage, id, ...props }) => {
+const Movie = ({ title, img, voteAverage, id, clickHandler, ...props }) => {
   const classes = useStyles();
 
-  const fullPostHandler = () => {
-    console.log(props);
-    props.history.push("/movies/" + id);
-  };
 
   return (
-    <Grid item className={classes.gridItem} onClick={() => fullPostHandler()}>
+    <Grid item className={classes.gridItem} onClick={() => clickHandler(id)}>
       <img
         src={"https://image.tmdb.org/t/p/w200/" + img}
         alt="movie poster"

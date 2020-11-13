@@ -13,10 +13,10 @@ const useStyles = makeStyles({
 });
 
 const MovieList = ({
-  apiUrl,
+  apiQuery,
   loadMovies,
   movies,
-  handleApiUrlChange,
+  handleApiQueryChange,
   ...props
 }) => {
   // componentDidMount() {
@@ -25,7 +25,9 @@ const MovieList = ({
   // }
   // tracking on which page we currently are
   // starting with 2 to prevent double render of 1st page
-  const [page, setPage] = useState(2);
+  const [page, setPage] = useState(
+    apiQuery.get("page") ? Number(apiQuery.get("page")) : 2
+  );
   const classes = useStyles();
   // add loader refrence
   const loader = useRef(null);
@@ -51,19 +53,20 @@ const MovieList = ({
   //   });
   // }, [page]);
   useEffect(() => {
-    loadMovies(apiUrl);
-  }, [apiUrl]);
+    console.log(apiQuery.toString());
+    loadMovies(apiQuery);
+  }, [apiQuery]);
 
-  // insert page to apiUrl ehich will execute useEffect with lodMovies
+  // insert page to apiQuery ehich will execute useEffect with lodMovies
   useEffect(() => {
-    const copyApiUrl = apiUrl;
+    const copyApiUrl = apiQuery;
     // console.log(copyApiUrl);
     // const updatedUrl =
-    apiUrl.set("page", page);
-    // apiUrl.set("with_genres", 12);
+    apiQuery.set("page", page);
+    // apiQuery.set("with_genres", 12);
 
     // console.log(updatedUrl);
-    handleApiUrlChange(apiUrl);
+    handleApiQueryChange(apiQuery);
   }, [page]);
 
   // here we handle what happens when user scrolls to Load More div
@@ -97,7 +100,9 @@ const MovieList = ({
   //     }
 
   const fullPostHandler = id => {
-    this.props.history.push("/movies/" + id);
+    props.history.push("/movies/" + id);
+    apiQuery.delete("page");
+    handleApiQueryChange(apiQuery);
   };
   // console.log(movies);
 
@@ -136,7 +141,7 @@ const MovieList = ({
             title={movie.title}
             img={movie.poster_path}
             key={movie.id}
-            clicked={() => fullPostHandler(movie.id)}
+            clickHandler={() => fullPostHandler(movie.id)}
             id={movie.id}
             voteAverage={movie.vote_average}
             {...props}
@@ -153,14 +158,15 @@ const mapStateToProps = state => {
     loading: state.api.loading,
     genre: state.api.genre,
     previousQuery: state.api.previousQuery,
-    apiUrl: state.api.apiUrl
+    apiQuery: state.api.apiQuery
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    loadMovies: apiUrl => dispatch(actionCreators.loadMovies(apiUrl)),
-    handleApiUrlChange: apiUrl => dispatch({ type: "UPDATE_APIURL", apiUrl })
+    loadMovies: apiQuery => dispatch(actionCreators.loadMovies(apiQuery)),
+    handleApiQueryChange: apiQuery =>
+      dispatch({ type: "UPDATE_APIURL", apiQuery })
   };
 };
 
